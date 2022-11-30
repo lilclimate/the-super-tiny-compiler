@@ -24,6 +24,14 @@ test('left paren', () => {
 	expect(tokenizer(code)).toEqual(tokens)
 })
 
+test('right paren', () => { 
+	const code = ')';
+	const tokens = [
+		{type: TokenTypes.Paren, value: ')'}	
+	]
+	expect(tokenizer(code)).toEqual(tokens)
+})
+
 enum TokenTypes { 
 	Paren,
 	Name,
@@ -42,6 +50,15 @@ function tokenizer(code: string): any {
 		let char = code[current]
 		
 		if (char === '(') {
+			tokens.push({
+				type: TokenTypes.Paren,
+				value: char 
+			});
+			current++;
+			continue;
+		}
+
+		if (char === ')') {
 			tokens.push({
 				type: TokenTypes.Paren,
 				value: char 
