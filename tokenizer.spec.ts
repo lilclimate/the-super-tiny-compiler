@@ -37,10 +37,20 @@ interface Token {
 
 function tokenizer(code: string): any {
 	const tokens: Token[] = [];
-	tokens.push({
-		type: TokenTypes.Paren,
-		value: code
-	});
+	let current = 0;
+	while (current < code.length) { 
+		let char = code[current]
+		
+		if (char === '(') {
+			tokens.push({
+				type: TokenTypes.Paren,
+				value: char 
+			});
+			current++;
+			continue;
+		}
+	}
+	
 	return tokens;
 }
 
