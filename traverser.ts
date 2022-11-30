@@ -1,8 +1,11 @@
-import { NodeTypes, RootNode, ChildNode } from './ast';
+import { NodeTypes, RootNode, ChildNode, CallExpressionNode } from './ast';
+
+type ParentNode = RootNode | CallExpressionNode | undefined;
+type MethodFn = (node: RootNode | ChildNode, parent: ParentNode) => void;
 
 export interface VisitorOption { 
-  enter(node: RootNode | ChildNode, parent: RootNode | ChildNode| undefined);
-  exit(node: RootNode | ChildNode, parent: RootNode | ChildNode| undefined);
+  enter: MethodFn;
+	exit: MethodFn;
 } 
 
 export interface Visitor { 
@@ -13,13 +16,13 @@ export interface Visitor {
 }
 
 export function traverser(rootNode: RootNode, visitor: Visitor) {
-  function traverserArray(params: ChildNode[], parent?: RootNode | ChildNode) {
+  function traverserArray(params: ChildNode[], parent: ParentNode) {
     params.forEach(node => {
       traverserNode(node, parent);
     });
   }
 
-  function traverserNode(node: ChildNode | RootNode, parent?: RootNode | ChildNode) {
+  function traverserNode(node: ChildNode | RootNode, parent?: ParentNode) {
     const visitorObj = visitor[node.type];
     if (visitorObj) {
       visitorObj.enter(node, parent);
