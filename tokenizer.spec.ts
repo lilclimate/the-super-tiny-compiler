@@ -44,6 +44,19 @@ test('number', () => {
 	expect(tokenizer(code)).toEqual(tokens);
 });
 
+test('(add 1 2)', () => { 
+	const code = `(add 1 2)`;
+	const tokens = 
+				[
+						{ type: TokenTypes.Paren,  value: '('        },
+						{ type: TokenTypes.Name,   value: 'add'      },
+						{ type: TokenTypes.Number, value: '1'        },
+						{ type: TokenTypes.Number, value: '2'        },
+						{ type: TokenTypes.Paren,  value: ')'        },
+				];
+	expect(tokenizer(code)).toEqual(tokens);
+})
+
 enum TokenTypes { 
 	Paren,
 	Name,
@@ -60,6 +73,12 @@ function tokenizer(code: string): any {
 	let current = 0;
 	while (current < code.length) { 
 		let char = code[current]
+
+		const WHITESPACE = /\s/	
+		if (WHITESPACE.test(char)) { 
+			current++;
+			continue;
+		}
 		
 		if (char === '(') {
 			tokens.push({
