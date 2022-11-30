@@ -56,23 +56,25 @@ test('number', () => {
 
 enum NodeTypes { 
   Root,
-  Number
+  Number,
+  CallExpression
 }
 
 function parser(tokens: { type: TokenTypes; value: string; }[]): any {
-  const ast = {
+  const rootNode = {
     type: NodeTypes.Root,
     body: [] as any,
   };
-  const token = tokens[0];
+  let current = 0;
+  const token = tokens[current];
   if (token.type === TokenTypes.Number) { 
-    ast.body.push({
+    rootNode.body.push({
       type: NodeTypes.Number,
       value: Number(token.value)
     });
   }
    
-  return ast;
+  return rootNode;
 }
 
 
