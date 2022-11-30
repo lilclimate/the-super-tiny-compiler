@@ -89,6 +89,7 @@ interface Visitor {
   Program?: VisitorOption;
   CallExpression?: VisitorOption;
   NumberLiteral?: VisitorOption
+  StringLiteral?: VisitorOption
 }
 
 function traverser(rootNode: RootNode, visitor: Visitor) {
