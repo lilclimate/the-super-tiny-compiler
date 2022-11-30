@@ -1,7 +1,7 @@
 import { expect, test }from 'vitest'
 import {NodeTypes, RootNode, ChildNode} from './ast'
 // 遍历树
-test.skip("traverser", () => {
+test("traverser", () => {
   const ast: RootNode = {
     type: NodeTypes.Program,
     body: [
@@ -100,6 +100,11 @@ function traverser(rootNode: RootNode, visitor: Visitor) {
   }
 
   function traverserNode(node: ChildNode| RootNode) {
+    const visitorObj = visitor[node.type];
+    if (visitorObj) { 
+      visitorObj.enter()
+    }
+
     switch (node.type) {
     case NodeTypes.NumberLiteral:
       break;
@@ -109,6 +114,10 @@ function traverser(rootNode: RootNode, visitor: Visitor) {
     case NodeTypes.Program:
       traverserArray(node.body);
       break;
+    }
+
+    if (visitorObj) { 
+      visitorObj.exit()
     }
   }
 
