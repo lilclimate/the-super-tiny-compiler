@@ -38,6 +38,12 @@ test('add', () => {
 	expect(tokenizer(code)).toEqual(tokens);
 });
 
+test('number', () => { 
+	const code = `12`;	
+	const tokens = [{type: TokenTypes.Number, value: '12'}];
+	expect(tokenizer(code)).toEqual(tokens);
+});
+
 enum TokenTypes { 
 	Paren,
 	Name,
@@ -82,7 +88,16 @@ function tokenizer(code: string): any {
 			}
 			tokens.push({type: TokenTypes.Name, value});
 		}
-		
+
+		const NUMBERS = /[0-9]/;	
+		if (NUMBERS.test(char)) { 
+			let value = '';
+			while (NUMBERS.test(char) && current < code.length) { 
+				value += char;
+				char = code[++current]
+			}
+			tokens.push({type: TokenTypes.Number, value});
+		}
 	}
 	
 	return tokens;
