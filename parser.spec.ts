@@ -84,29 +84,34 @@ test('callExpression', () => {
 
 
 function parser(tokens: { type: TokenTypes; value: string; }[]): any {
-  const rootNode = createRootNode();
   let current = 0;
-  let token = tokens[current];
-  if (token.type === TokenTypes.Number) { 
-    rootNode.body.push(createNumberNode(token.value));
-  }
-
-  if (token.type === TokenTypes.Paren && token.value === '(') {
-    token = tokens[++current];
-    const expressionNode = createCallExpressionNode(token.value);
-
-    token = tokens[++current];
-    if (!(token.type=== TokenTypes.Paren && token.value !==')')) { 
-      while (current < tokens.length) { 
-        if (token.type === TokenTypes.Number) { 
-          expressionNode.params.push(createNumberNode(token.value));
-        }
-        token = tokens[++current]        
-      }  
-    }
-    rootNode.body.push(expressionNode);
-  }
+  const rootNode = createRootNode();
+  
+  rootNode.body.push(walk());
   return rootNode;
+
+  function walk() {
+    let token = tokens[current];
+    if (token.type === TokenTypes.Number) {
+      return createNumberNode(token.value);
+    }
+
+    if (token.type === TokenTypes.Paren && token.value === '(') {
+      token = tokens[++current];
+      const expressionNode = createCallExpressionNode(token.value);
+
+      token = tokens[++current];
+      while (current < tokens.length && !(token.type === TokenTypes.Paren && token.value !== ')')) {
+        if (token.type === TokenTypes.Number) {
+          expressionNode.params.push(walk());
+        }
+        token = tokens[++current];
+      }
+      return expressionNode;
+    }
+    throw new Error(`undefined token: ${token}`);
+  }
+  
 }
 
 enum NodeTypes { 
@@ -145,14 +150,14 @@ function createCallExpressionNode(name: string): CallExpressionNode {
   return {
     type: NodeTypes.CallExpression,
     name,
-    params: [] as any,
+    params: [],
   };
 }
 
 function createRootNode(): RootNode {
   return {
     type: NodeTypes.Root,
-    body: [] as any,
+    body: [],
   };
 }
 
