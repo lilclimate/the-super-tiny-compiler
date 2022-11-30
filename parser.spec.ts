@@ -51,6 +51,7 @@ test('number', () => {
       value: 2
     }],
   };
+  expect(parser(tokens)).toEqual(ast);
 });
 
 enum NodeTypes { 
