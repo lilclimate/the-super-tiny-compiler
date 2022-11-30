@@ -101,7 +101,7 @@ function parser(tokens: { type: TokenTypes; value: string; }[]): any {
       const expressionNode = createCallExpressionNode(token.value);
 
       token = tokens[++current];
-      while (current < tokens.length && !(token.type === TokenTypes.Paren && token.value !== ')')) {
+      while (current < tokens.length && !(token.type === TokenTypes.Paren && token.value === ')')) {
         if (token.type === TokenTypes.Number) {
           expressionNode.params.push(walk());
         }
