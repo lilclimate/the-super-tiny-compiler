@@ -1,0 +1,14 @@
+{
+  "name": "the-super-tiny-compiler",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest --run"
+  },
+  "repository": "git@github.com:lilclimate/the-super-tiny-compiler.git",
+  "author": "lil climate <lilclimate@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "vitest": "0.22.1"
+  }
+}
