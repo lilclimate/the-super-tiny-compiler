@@ -93,6 +93,7 @@ function parser(tokens: { type: TokenTypes; value: string; }[]): any {
   function walk() {
     let token = tokens[current];
     if (token.type === TokenTypes.Number) {
+      current++;
       return createNumberNode(token.value);
     }
 
@@ -101,12 +102,11 @@ function parser(tokens: { type: TokenTypes; value: string; }[]): any {
       const expressionNode = createCallExpressionNode(token.value);
 
       token = tokens[++current];
-      while (current < tokens.length && !(token.type === TokenTypes.Paren && token.value === ')')) {
-        if (token.type === TokenTypes.Number) {
-          expressionNode.params.push(walk());
-        }
-        token = tokens[++current];
+      while (!(token.type === TokenTypes.Paren && token.value === ')')) {
+        expressionNode.params.push(walk());
+        token = tokens[current];
       }
+      current++;
       return expressionNode;
     }
     throw new Error(`undefined token: ${token}`);
