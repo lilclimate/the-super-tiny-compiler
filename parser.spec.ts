@@ -1,6 +1,6 @@
 import { test, expect } from 'vitest'
 import { TokenTypes } from './tokenizer';
-test.skip('parser', () => {
+test('parser', () => {
 	const tokens = 
     [
       { type: TokenTypes.Paren,  value: '('        },
@@ -15,22 +15,22 @@ test.skip('parser', () => {
     ];	
 
 	const ast = {
-      type: 'Program',
+      type: NodeTypes.Root,
       body: [{
-        type: 'CallExpression',
+        type: NodeTypes.CallExpression,
         name: 'add',
         params: [{
-          type: 'NumberLiteral',
-          value: '2',
+          type: NodeTypes.Number,
+          value: 2,
         }, {
-          type: 'CallExpression',
+          type: NodeTypes.CallExpression,
           name: 'subtract',
           params: [{
-            type: 'NumberLiteral',
-            value: '4',
+            type: NodeTypes.Number,
+            value: 4,
           }, {
-            type: 'NumberLiteral',
-            value: '2',
+            type: NodeTypes.Number,
+            value: 2,
           }]
         }]
       }]
@@ -87,7 +87,8 @@ function parser(tokens: { type: TokenTypes; value: string; }[]): any {
   let current = 0;
   const rootNode = createRootNode();
   
-  rootNode.body.push(walk());
+  while (current < tokens.length) 
+    rootNode.body.push(walk());
   return rootNode;
 
   function walk() {
