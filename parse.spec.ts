@@ -38,5 +38,56 @@ test.skip('parser', () => {
 	expect(parser(tokens)).toEqual(ast);
 });
 
-function parser(tokens: { type: TokenTypes; value: string; }[]): any {
+test('number', () => { 
+  const tokens = [{
+    type: TokenTypes.Number,
+    value: "2"
+  }];
+
+  const ast = {
+    type: NodeTypes.Root,
+    body: [{
+      type: NodeTypes.Number,
+      value: 2
+    }],
+  };
+});
+
+enum NodeTypes { 
+  Root,
+  Number
 }
+
+function parser(tokens: { type: TokenTypes; value: string; }[]): any {
+  const ast = {
+    type: NodeTypes.Root,
+    body: [] as any,
+  };
+  const token = tokens[0];
+  if (token.type === TokenTypes.Number) { 
+    ast.body.push({
+      type: NodeTypes.Number,
+      value: Number(token.value)
+    });
+  }
+   
+  return ast;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
