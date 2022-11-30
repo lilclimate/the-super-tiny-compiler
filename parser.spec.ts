@@ -1,4 +1,5 @@
 import { test, expect } from 'vitest'
+import { NodeTypes, NumberNode, CallExpressionNode, RootNode } from './ast';
 import { TokenTypes } from './tokenizer';
 test('parser', () => {
 	const tokens = 
@@ -15,21 +16,21 @@ test('parser', () => {
     ];	
 
 	const ast = {
-      type: NodeTypes.Root,
+      type: NodeTypes.Program,
       body: [{
         type: NodeTypes.CallExpression,
         name: 'add',
         params: [{
-          type: NodeTypes.Number,
+          type: NodeTypes.NumberLiteral,
           value: 2,
         }, {
           type: NodeTypes.CallExpression,
           name: 'subtract',
           params: [{
-            type: NodeTypes.Number,
+            type: NodeTypes.NumberLiteral,
             value: 4,
           }, {
-            type: NodeTypes.Number,
+            type: NodeTypes.NumberLiteral,
             value: 2,
           }]
         }]
@@ -45,9 +46,9 @@ test('number', () => {
   }];
 
   const ast = {
-    type: NodeTypes.Root,
+    type: NodeTypes.Program,
     body: [{
-      type: NodeTypes.Number,
+      type: NodeTypes.NumberLiteral,
       value: 2
     }],
   };
@@ -65,15 +66,15 @@ test('callExpression', () => {
     ];	
 
 	const ast = {
-      type: NodeTypes.Root,
+      type: NodeTypes.Program,
       body: [{
         type: NodeTypes.CallExpression,
         name: 'add',
         params: [{
-          type: NodeTypes.Number,
+          type: NodeTypes.NumberLiteral,
           value: 2,
         }, {
-          type: NodeTypes.Number,
+          type: NodeTypes.NumberLiteral,
           value: 4,
         }]
       }]
@@ -115,34 +116,9 @@ function parser(tokens: { type: TokenTypes; value: string; }[]): any {
   
 }
 
-enum NodeTypes { 
-  Root,
-  Number,
-  CallExpression
-}
-
-interface Node { 
-	type: NodeTypes
-}
-
-type ChildNode = NumberNode | CallExpressionNode
-
-interface RootNode extends Node { 
-	body: ChildNode[]
-}
-
-interface NumberNode extends Node { 
-	value:number 
-}
-
-interface CallExpressionNode extends Node { 
-	name: string,
-	params: ChildNode[]
-}
-
 function createNumberNode(value: string): NumberNode {
   return {
-    type: NodeTypes.Number,
+    type: NodeTypes.NumberLiteral,
     value: Number(value)
   };
 }
@@ -157,7 +133,7 @@ function createCallExpressionNode(name: string): CallExpressionNode {
 
 function createRootNode(): RootNode {
   return {
-    type: NodeTypes.Root,
+    type: NodeTypes.Program,
     body: [],
   };
 }
