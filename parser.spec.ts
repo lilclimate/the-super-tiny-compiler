@@ -100,8 +100,8 @@ function parser(tokens: { type: TokenTypes; value: string; }[]): any {
       while (current < tokens.length) { 
         if (token.type === TokenTypes.Number) { 
           expressionNode.params.push(createNumberNode(token.value));
-          token = tokens[++current]        
         }
+        token = tokens[++current]        
       }  
     }
     rootNode.body.push(expressionNode);
