@@ -33,7 +33,7 @@ test.skip("traverser", () => {
   };
 
   const callArr: any = [];
-  const visitor: any = {
+  const visitor: Visitor = {
     Program: {
       enter() {
         callArr.push("program-enter");
@@ -80,11 +80,18 @@ test.skip("traverser", () => {
   ]);
 });
 
+interface VisitorOption { 
+  enter();
+  exit();
+} 
 
+interface Visitor { 
+  Program?: VisitorOption;
+  CallExpression?: VisitorOption;
+  NumberLiteral?: VisitorOption
+}
 
-
-function traverser(rootNode: RootNode, visitor: any) {
-
+function traverser(rootNode: RootNode, visitor: Visitor) {
   function traverserArray(params: ChildNode[]) {
     params.forEach(node => { 
       traverserNode(node);
