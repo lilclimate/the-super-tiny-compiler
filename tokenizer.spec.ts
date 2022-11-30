@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest'
-test.skip('tokenizer', () => { 
+test('tokenizer', () => { 
 	const code = `(add 2 (subtract 4 2))`;
 	const tokens = 
 				[
