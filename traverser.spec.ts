@@ -1,5 +1,5 @@
 import { expect, test }from 'vitest'
-import {NodeTypes, RootNode} from './ast'
+import {NodeTypes, RootNode, ChildNode} from './ast'
 // 遍历树
 test.skip("traverser", () => {
   const ast: RootNode = {
@@ -80,5 +80,31 @@ test.skip("traverser", () => {
   ]);
 });
 
-function traverser(ast: RootNode, visitor: any) {
+
+
+
+function traverser(rootNode: RootNode, visitor: any) {
+
+  function traverserArray(params: ChildNode[]) {
+    params.forEach(node => { 
+      traverserNode(node);
+    }); 
+  }
+
+  function traverserNode(node: ChildNode| RootNode) {
+    switch (node.type) {
+    case NodeTypes.NumberLiteral:
+      break;
+    case NodeTypes.CallExpression:
+      traverserArray(node.params);
+      break;
+    case NodeTypes.Program:
+      traverserArray(node.body);
+      break;
+    }
+  }
+
+  traverserNode(rootNode);
 }
+
+
