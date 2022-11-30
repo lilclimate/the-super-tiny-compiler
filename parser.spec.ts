@@ -81,33 +81,19 @@ test('callExpression', () => {
 	expect(parser(tokens)).toEqual(ast);
 });
 
-enum NodeTypes { 
-  Root,
-  Number,
-  CallExpression
-}
+
 
 function parser(tokens: { type: TokenTypes; value: string; }[]): any {
-  const rootNode = {
-    type: NodeTypes.Root,
-    body: [] as any,
-  };
+  const rootNode = createRootNode();
   let current = 0;
   let token = tokens[current];
   if (token.type === TokenTypes.Number) { 
-    rootNode.body.push({
-      type: NodeTypes.Number,
-      value: Number(token.value)
-    });
+    rootNode.body.push(createNumberNode(token.value));
   }
 
   if (token.type === TokenTypes.Paren && token.value === '(') {
     token = tokens[++current];
-    const expressionNode = {
-      type: NodeTypes.CallExpression,
-      name: token.value,
-      params: [] as any,
-    };
+    const expressionNode = createCallExpressionNode(token.value);
 
     token = tokens[++current];
     if (!(token.type=== TokenTypes.Paren && token.value !==')')) { 
@@ -129,20 +115,50 @@ function parser(tokens: { type: TokenTypes; value: string; }[]): any {
   return rootNode;
 }
 
+enum NodeTypes { 
+  Root,
+  Number,
+  CallExpression
+}
 
+interface Node { 
+	type: NodeTypes
+}
 
+type ChildNode = NumberNode | CallExpressionNode
 
+interface RootNode extends Node { 
+	body: ChildNode[]
+}
 
+interface NumberNode extends Node { 
+	value:number 
+}
 
+interface CallExpressionNode extends Node { 
+	name: string,
+	params: ChildNode[]
+}
 
+function createNumberNode(value: string): NumberNode {
+  return {
+    type: NodeTypes.Number,
+    value: Number(value)
+  };
+}
 
+function createCallExpressionNode(name: string): CallExpressionNode {
+  return {
+    type: NodeTypes.CallExpression,
+    name,
+    params: [] as any,
+  };
+}
 
-
-
-
-
-
-
-
-
+function createRootNode(): RootNode {
+  return {
+    type: NodeTypes.Root,
+    body: [] as any,
+  };
+}
 
