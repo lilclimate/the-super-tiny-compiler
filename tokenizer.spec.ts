@@ -30,9 +30,17 @@ enum TokenTypes {
 	Number,
 }
 
+interface Token { 
+	type: TokenTypes;
+	value: string;
+}
+
 function tokenizer(code: string): any {
-	return [
-		{type: TokenTypes.Paren, value: '('}	
-	]
+	const tokens: Token[] = [];
+	tokens.push({
+		type: TokenTypes.Paren,
+		value: code
+	});
+	return tokens;
 }
 
