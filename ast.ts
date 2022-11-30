@@ -7,10 +7,15 @@ export enum NodeTypes {
 interface Node {
   type: NodeTypes;
 }
-export type ChildNode = NumberNode | CallExpressionNode;
+export type ChildNode = NumberNode | CallExpressionNode| StringLiteralNode
 export interface RootNode extends Node {
   body: ChildNode[];
   type: NodeTypes.Program;
+}
+
+export interface StringLiteralNode extends Node { 
+  type: NodeTypes.StringLiteral;
+  value: string;
 }
 export interface NumberNode extends Node {
   value: number;
