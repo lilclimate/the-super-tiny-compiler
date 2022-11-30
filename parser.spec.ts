@@ -99,19 +99,13 @@ function parser(tokens: { type: TokenTypes; value: string; }[]): any {
     if (!(token.type=== TokenTypes.Paren && token.value !==')')) { 
       while (current < tokens.length) { 
         if (token.type === TokenTypes.Number) { 
-          expressionNode.params.push({
-            type: NodeTypes.Number,
-            value: Number(token.value),
-          });
+          expressionNode.params.push(createNumberNode(token.value));
+          token = tokens[++current]        
         }
-        token = tokens[++current]        
       }  
     }
     rootNode.body.push(expressionNode);
   }
-
-  
-   
   return rootNode;
 }
 
