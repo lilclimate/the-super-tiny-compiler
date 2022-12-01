@@ -100,7 +100,7 @@ test("NumberLiteral", () => {
   expect(transformer(originalAST)).toEqual(transformedAST);
 });
 
-test.skip("callExpression add();", () => {
+test("callExpression add();", () => {
   const originalAST:RootNode = {
     type: NodeTypes.Program,
     body: [
@@ -150,6 +150,20 @@ function transformer(ast: RootNode): any {
 
         pushNode(parent, numberNode);
        }
+    },
+    CallExpression: {
+      enter(node, parent) { 
+        if (node.type !== NodeTypes.CallExpression) return;
+        const expressionNode = {
+          type: node.type,
+          callee: {
+            type: "Identifier",
+            name: node.name,
+          },
+          arguments: [],
+        }
+        pushNode(parent, expressionNode);
+      }
     }
   });
   
