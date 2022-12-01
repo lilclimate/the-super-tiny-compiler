@@ -1,5 +1,5 @@
 import { test, expect } from 'vitest'
-import { NodeTypes, RootNode } from './ast';
+import { CallExpressionNode, NodeTypes, RootNode } from './ast';
 import { traverser } from './traverser';
 test.skip("transformer", () => {
   const originalAST: RootNode = {
@@ -148,19 +148,22 @@ function transformer(ast: RootNode): any {
             value: node.value,
           };
 
-        let data: any = numberNode;
-        if (parent?.type !== NodeTypes.CallExpression)
-          data = {
-		      	type: "ExpressionStatement",
-		      	expression: data,
-		      };
-
-        parent?.context?.push(data);
+        pushNode(parent, numberNode);
        }
     }
   });
   
 
   return newAst;
+
+  function pushNode(parent: RootNode |CallExpressionNode | undefined, data: any) {
+    if (parent?.type !== NodeTypes.CallExpression)
+      data = {
+        type: "ExpressionStatement",
+        expression: data,
+      };
+
+    parent?.context?.push(data);
+  }
 }
 
