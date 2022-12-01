@@ -122,7 +122,7 @@ test.skip("codegen", () => {
 });
 
 
-test.skip('NumberLiteral', () => { 
+test('NumberLiteral', () => { 
 	const ast = {
     type: NodeTypes.Program,
     body: [
@@ -140,4 +140,14 @@ test.skip('NumberLiteral', () => {
 });
 
 function codegen(node): any {
+	switch (node.type) {
+		case "NumberLiteral":
+			return node.value + ";";
+		case "ExpressionStatement":
+			return codegen(node.expression);
+		case "Program":
+			return codegen(node.body[0]);
+		default:
+			break;
+	}
 }
