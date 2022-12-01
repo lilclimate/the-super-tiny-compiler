@@ -1,5 +1,6 @@
 import { test, expect } from 'vitest'
 import { NodeTypes, RootNode } from './ast';
+import { traverser } from './traverser';
 test.skip("transformer", () => {
   const originalAST: RootNode = {
     type: NodeTypes.Program,
@@ -73,7 +74,7 @@ test.skip("transformer", () => {
   expect(transformer(originalAST)).toEqual(transformedAST);
 });
 
-test.skip("NumberLiteral", () => {
+test("NumberLiteral", () => {
   const originalAST:RootNode = {
     type: NodeTypes.Program,
     body: [
@@ -91,7 +92,7 @@ test.skip("NumberLiteral", () => {
         type: "ExpressionStatement",
         expression: {
           type: "NumberLiteral",
-          value: "2",
+          value: 2,
         },
       },
     ],
@@ -99,7 +100,7 @@ test.skip("NumberLiteral", () => {
   expect(transformer(originalAST)).toEqual(transformedAST);
 });
 
-test.skip("callExpresstion add();", () => {
+test.skip("callExpression add();", () => {
   const originalAST:RootNode = {
     type: NodeTypes.Program,
     body: [
@@ -130,5 +131,36 @@ test.skip("callExpresstion add();", () => {
   expect(transformer(originalAST)).toEqual(transformedAST);
 });
 
-function transformer(originalAST: RootNode): any {
+
+function transformer(ast: RootNode): any {
+  const newAst = {
+    type: NodeTypes.Program,
+    body: [],
+  };
+
+  ast.context = newAst.body;
+  traverser(ast, {
+    NumberLiteral: {
+      enter(node, parent) {
+        if (node.type !== NodeTypes.NumberLiteral) return;
+          const numberNode = {
+            type: node.type,
+            value: node.value,
+          };
+
+        let data: any = numberNode;
+        if (parent?.type !== NodeTypes.CallExpression)
+          data = {
+		      	type: "ExpressionStatement",
+		      	expression: data,
+		      };
+
+        parent?.context?.push(data);
+       }
+    }
+  });
+  
+
+  return newAst;
 }
+
