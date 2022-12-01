@@ -78,7 +78,7 @@ test.skip("two ExpressionStatement", () => {
   );
 });
 
-test.skip("codegen", () => {
+test("codegen", () => {
   const ast = {
     type: NodeTypes.Program,
     body: [
@@ -142,9 +142,11 @@ test('NumberLiteral', () => {
 function codegen(node): any {
 	switch (node.type) {
 		case "NumberLiteral":
-			return node.value + ";";
+			return node.value;
+		case "CallExpression":
+			return `${node.callee.name}(${node.arguments.map(codegen).join(", ")})`
 		case "ExpressionStatement":
-			return codegen(node.expression);
+			return `${codegen(node.expression)};`;
 		case "Program":
 			return codegen(node.body[0]);
 		default:
