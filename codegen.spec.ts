@@ -1,6 +1,6 @@
 import { test, expect } from "vitest";
 import { NodeTypes } from "./ast";
-test.skip("two ExpressionStatement", () => {
+test("two ExpressionStatement", () => {
   const ast = {
     type: NodeTypes.Program,
     body: [
@@ -148,7 +148,7 @@ function codegen(node): any {
 		case "ExpressionStatement":
 			return `${codegen(node.expression)};`;
 		case "Program":
-			return codegen(node.body[0]);
+			return node.body.map(codegen).join("");
 		default:
 			break;
 	}
