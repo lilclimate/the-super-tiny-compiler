@@ -1,6 +1,6 @@
 import { NodeTypes, RootNode, ChildNode, CallExpressionNode } from './ast';
 
-type ParentNode = RootNode | CallExpressionNode | undefined;
+export type ParentNode = RootNode | CallExpressionNode | undefined;
 type MethodFn = (node: RootNode | ChildNode, parent: ParentNode) => void;
 
 export interface VisitorOption { 

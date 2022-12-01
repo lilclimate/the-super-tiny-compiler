@@ -1,6 +1,6 @@
 import { test, expect } from 'vitest'
 import { CallExpressionNode, NodeTypes, RootNode } from './ast';
-import { traverser } from './traverser';
+import { traverser, ParentNode } from './traverser';
 test.skip("transformer", () => {
   const originalAST: RootNode = {
     type: NodeTypes.Program,
@@ -156,7 +156,7 @@ function transformer(ast: RootNode): any {
 
   return newAst;
 
-  function pushNode(parent: RootNode |CallExpressionNode | undefined, data: any) {
+  function pushNode(parent: ParentNode, data: any) {
     if (parent?.type !== NodeTypes.CallExpression)
       data = {
         type: "ExpressionStatement",
